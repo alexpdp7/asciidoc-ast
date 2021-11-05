@@ -1,0 +1,3 @@
+[submodule "asciidoctor-intellij-plugin"]
+	path = asciidoctor-intellij-plugin
+	url = git@github.com:asciidoctor/asciidoctor-intellij-plugin.git

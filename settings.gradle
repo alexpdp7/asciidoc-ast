@@ -9,3 +9,4 @@
 
 rootProject.name = 'asciidoc-ast'
 include('app')
+include('asciidoctor-intellij-plugin')
