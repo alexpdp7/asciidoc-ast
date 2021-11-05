@@ -1,0 +1,3 @@
+$ JAVA_HOME=/usr/lib/jvm/java-11-openjdk ./gradlew app:shadowJar
+$ /usr/lib/jvm/java-11/bin/java -jar app/build/libs/app-all.jar foo.adoc
+$ less foo.ast.json 
