@@ -23,19 +23,11 @@ import com.intellij.testFramework.ParsingTestCase;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		Path inPath = Path.of(args[0]);
-		String inAdoc = Files.readString(inPath);
-
-		ASTNode ast = parse(inAdoc);
+		ASTNode ast = parse(Files.readString(Path.of(args[0])));
 
 		GsonBuilder gson = new GsonBuilder();
 		String json = gson.create().toJson(toJsonElement(ast));
-
-		if (!args[0].endsWith(".adoc")) {
-			throw new Exception(args[0] + " does not end in .adoc");
-		}
-		Path outPath = Path.of(args[0].replaceFirst("\\.adoc", ".ast.json"));
-		Files.writeString(outPath, json);
+		System.out.println(json);
 	}
 
 	private static JsonElement toJsonElement(ASTNode astNode) {
@@ -63,7 +55,7 @@ public class App {
 		PrintStream stderr = System.err;
 		try {
 			System.setErr(new PrintStream(new ByteArrayOutputStream()));
-	
+
 			TestAdapter testAdapter = new TestAdapter();
 			try {
 				testAdapter.setUp();
@@ -72,8 +64,7 @@ public class App {
 			}
 			PsiFile psiFile = testAdapter.doParseFile("foo", asciiDoc);
 			return psiFile.getNode();
-		}
-		finally {
+		} finally {
 			System.setErr(stderr);
 		}
 	}
