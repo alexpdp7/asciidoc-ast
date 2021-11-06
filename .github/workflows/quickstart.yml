@@ -1,0 +1,17 @@
+on: [push]
+
+name: Continuous integration
+
+jobs:
+  check:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - run: ./gradlew --no-daemon app:shadowJar
+      - uses: actions/upload-artifact@v1
+        with:
+          name: asciidoc-ast.jar
+          path: app/build/libs/app-all.jar
