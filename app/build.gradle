@@ -50,5 +50,6 @@ intellij {
 shadowJar {
 	zip64 = true
     mainClassName = 'net.pdp7.asciidoc.App'
- }
+	minimize()
+}
  
