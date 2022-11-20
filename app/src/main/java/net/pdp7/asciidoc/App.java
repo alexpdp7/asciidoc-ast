@@ -2,6 +2,7 @@ package net.pdp7.asciidoc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -23,11 +24,29 @@ import com.intellij.testFramework.ParsingTestCase;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		ASTNode ast = parse(Files.readString(Path.of(args[0])));
-
+		int argumentsLength = args.length;
+		if (argumentsLength == 0) {
+			System.err.println("ERROR: must provide a file or '-' to read from STDIN");
+			System.exit(1);
+		}
+		boolean readFromStdin = args[argumentsLength - 1].equals("-");
+		String input;
+		if (readFromStdin) {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			byte[] buffer = new byte[32 * 1024];
+			int bytesRead;
+			while ((bytesRead = System.in.read(buffer)) > 0) {
+				baos.write(buffer, 0, bytesRead);
+			}
+			input = baos.toString(StandardCharsets.UTF_8);
+		} else {
+			input = Files.readString(Path.of(args[0]));
+		}
+		ASTNode ast = parse(input);
 		GsonBuilder gson = new GsonBuilder();
 		String json = gson.create().toJson(toJsonElement(ast));
 		System.out.println(json);
+		System.exit(0);
 	}
 
 	private static JsonElement toJsonElement(ASTNode astNode) {
